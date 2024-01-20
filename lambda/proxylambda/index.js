@@ -1,14 +1,13 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk'
 
 exports.handler = async (event) => {
   body = JSON.parse(event.body)
   console.log(body)
-  
+
   var eventText = JSON.stringify(body, null, 2);
 
   var params = {
     Message: eventText,
-    Subject: "Test SNS From Lambda",
     TopicArn: process.env.TOPIC_ARN,
     MessageAttributes: { "command": { DataType: 'String', StringValue: body.data.name } }
   };
