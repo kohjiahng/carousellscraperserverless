@@ -4,14 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.14.1"
+    "axios": "^1.6.5",
+    "dotenv": "^16.3.2",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"
   },
   "scripts": {
     "start": "STAGE=production node app.js",
-    "develop": "STAGE=development nodemon app.js"
+    "develop": "STAGE=development nodemon app.js",
+    "register": "node register.js"
   }
-  
 }
