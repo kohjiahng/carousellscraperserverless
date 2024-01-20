@@ -1,0 +1,17 @@
+{
+  "name": "carouselldiscordscraperapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.23.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1540.0",
+    "aws4fetch": "^1.0.17",
+    "tweetnacl": "^1.0.3"
+  },
+  "scripts":{
+    "deploy": "wrangler deploy"
+  }
+}

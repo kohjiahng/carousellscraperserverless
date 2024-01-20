@@ -2,8 +2,10 @@ const AWS = require('aws-sdk');
 
 exports.handler = async (event) => {
   body = JSON.parse(event.body)
-  var eventText = JSON.stringify(body, null, 2);
+  console.log(body)
   
+  var eventText = JSON.stringify(body, null, 2);
+
   var params = {
     Message: eventText,
     Subject: "Test SNS From Lambda",

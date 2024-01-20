@@ -1,0 +1,8 @@
+name = "carouselldiscordscraperapi"
+main = "src/index.js"
+compatibility_date = "2024-01-20"
+compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+LAMBDA_FN = "arn:aws:lambda:ap-southeast-1:980538549880:function:CarousellDiscordScraperProxyLambda"
+PUBLIC_KEY = "4204da410eda2a5c8b01a0c7d691656be096e3b5b25009c919b4de5307012f54"
