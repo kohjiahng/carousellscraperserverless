@@ -41,7 +41,7 @@ export default{
   async fetch(request, env, ctx) {
     const aws = new AwsClient({ accessKeyId: env.AWS_ACCESS_KEY_ID, secretAccessKey: env.AWS_SECRET_ACCESS_KEY }) // eslint-disable-line no-undef
     const REGION = env.REGION || "ap-southeast-1"
-    const LAMBDA_INVOKE_URL = `https://lambda.${REGION}.amazonaws.com/2015-03-31/functions/${env.LAMBDA_FN}/invocations?X-Amz-Invocation-Type=Event`
+    const LAMBDA_INVOKE_URL = `https://lambda.${REGION}.amazonaws.com/2015-03-31/functions/${env.LAMBDA_FN}/invocations`
 
     const lambdaEvent = await toLambdaEvent(request);
     const requestBody = JSON.parse(lambdaEvent.body)
@@ -65,9 +65,9 @@ export default{
     if (requestBody.data.name) {
       const lambdaPromise = aws.fetch(LAMBDA_INVOKE_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Amz-Invocation-Type': 'Event'},
         body: JSON.stringify(lambdaEvent),
-      }).then(async value=>console.log(await value.json()))
+      })
 
       if (await Promise.all([verifyPromise, lambdaPromise])) {
         return new JsonResponse(

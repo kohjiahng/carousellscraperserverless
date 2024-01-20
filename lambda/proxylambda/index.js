@@ -1,5 +1,4 @@
-import AWS from 'aws-sdk'
-
+const AWS = require('aws-sdk')
 exports.handler = async (event) => {
   body = JSON.parse(event.body)
   console.log(body)
@@ -16,5 +15,9 @@ exports.handler = async (event) => {
   await new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise().then((value)=>{
     console.log('Published to SNS!')
   });
+
+  return {
+    status: 200
+  }
 
 }
