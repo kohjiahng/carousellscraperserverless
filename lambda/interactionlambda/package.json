@@ -1,9 +1,10 @@
 {
-  "name": "proxylambda",
+  "name": "interactionlambda",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.1540.0"
+    "aws-sdk": "^2.1540.0",
+    "tweetnacl": "^1.0.3"
   }
 }

@@ -9,11 +9,15 @@ const headers = {
 }
 
 let command_data = {
-  "name": "foo",
+  "name": "start",
   "type": 1,
-  "description": "replies with bar ;/",
+  "description": "Starts the scraper",
 }
 
 axios.post(url, JSON.stringify(command_data), {
   headers: headers,
-})
+}).then(
+  response => console.log(response.data)
+).catch(
+  err => console.log(err)
+)
