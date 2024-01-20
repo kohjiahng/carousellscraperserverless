@@ -40,7 +40,7 @@ async function toLambdaEvent(request) {
 export default{
   async fetch(request, env, ctx) {
     const aws = new AwsClient({ accessKeyId: env.AWS_ACCESS_KEY_ID, secretAccessKey: env.AWS_SECRET_ACCESS_KEY }) // eslint-disable-line no-undef
-    REGION = env.REGION || "ap-southeast-1"
+    const REGION = env.REGION || "ap-southeast-1"
     const LAMBDA_INVOKE_URL = `https://lambda.${REGION}.amazonaws.com/2015-03-31/functions/${env.LAMBDA_FN}/invocations?X-Amz-Invocation-Type=Event`
 
     const lambdaEvent = await toLambdaEvent(request);
