@@ -1,0 +1,17 @@
+{
+  "name": "carouselldiscordscraperserverless",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jia Hng <jiahngkoh@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@serverless/compose": "^1.3.0",
+    "serverless-cloudflare-workers": "^1.2.0"
+  },
+  "scripts": {
+    "deploy": "cd lambda && serverless deploy && sh ../deploy_worker_api.sh",
+    "deploy-worker-api": "sh deploy_worker_api.sh",
+    "deploy-lambda": "cd lambda && serverless deploy",
+    "register-commands": "cd register_commands && yarn register"
+  }
+}

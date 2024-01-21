@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios')
 exports.globalHandler = async (event, action) => {
   /*
    * Should be changed to respond differently depending on interaction type.

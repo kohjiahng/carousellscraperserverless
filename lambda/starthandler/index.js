@@ -1,5 +1,6 @@
-import { globalHandler } from 'handler.js'
+const { globalHandler } = require('./handler.js')
 const action = async (body) => {
+  console.log(body)
   return {
     "content": "Starting bot..."
   }

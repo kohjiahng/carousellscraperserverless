@@ -1,0 +1,64 @@
+org: jiahng
+app: carousell-discord-scraper
+service: CarousellDiscordScraper
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-southeast-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource: !Ref CommandTopic
+
+functions:
+  proxyLambda:
+    handler: proxylambda/index.handler
+    environment:
+      TOPIC_ARN: !Ref CommandTopic
+  startHandler:
+    handler: starthandler/index.handler
+    events:
+      - sns:
+          arn: !Ref CommandTopic
+          topicName: CommandTopic
+          filterPolicy:
+            command:
+              - start
+
+resources:
+  Resources:
+    CommandTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: CommandTopic
+    ProxyLambdaInvoker:
+      Type: AWS::IAM::User
+      Properties:
+        UserName: "ProxyLambdaInvoker"
+        Policies:
+        - PolicyName: ProxyLambdaInvokePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+                - "lambda:InvokeFunction"
+              Resource: !GetAtt ProxyLambdaLambdaFunction.Arn #{ "Fn::GetAtt": ["ProxyLambdaLambdaFunction", "Arn" ] }
+    ProxyLambdaInvokerUserKey:
+      Type: AWS::IAM::AccessKey
+      Properties:
+        UserName:
+          Ref: ProxyLambdaInvoker
+
+outputs:
+  ProxyLambdaInvokerAccessKeyID: !Ref ProxyLambdaInvokerUserKey
+  ProxyLambdaInvokerSecretAccessKey: !GetAtt ProxyLambdaInvokerUserKey.SecretAccessKey
+  ProxyLambdaArn: !GetAtt ProxyLambdaLambdaFunction.Arn
+
+
+

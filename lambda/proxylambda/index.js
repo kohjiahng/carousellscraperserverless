@@ -12,7 +12,7 @@ exports.handler = async (event) => {
   };
 
   // Create promise and SNS service object
-  await new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise().then((value)=>{
+  await new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise().then((value) => {
     console.log('Published to SNS!')
   });
 
