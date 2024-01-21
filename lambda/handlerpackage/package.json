@@ -1,9 +1,9 @@
 {
-  "name": "starthandler",
+  "name": "handlerpackage",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.1540.0"
+    "axios": "^1.6.5"
   }
 }

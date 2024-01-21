@@ -8,28 +8,32 @@ const action = async (body) => {
 
   const params = {
     TableName: process.env.TABLE_ARN,
-    Item: {
-      channel_id: { S: channel_id },
-      target_url: { S: target_url }
+    Key: {
+      channel_id: { S: channel_id }
     }
   }
 
-  putPromise = new Promise((resolve, reject) => {
-    dynamodb.putItem(params, (err, data) => {
+  getPromise = new Promise((resolve, reject) => {
+    dynamodb.getItem(params, (err, data) => {
       if (data) {
+        console.log(data)
         resolve(data);
       } else { reject(err) }
     })
   })
 
-  putPromise = putPromise.then((response) => {
-    return { "content": "Bot Started" }
+  getPromise = getPromise.then((response) => {
+    if (response.Item) {
+      return { "content": "Bot is running!" }
+    } else {
+      return { "content": "Bot is not running!" }
+    }
   }).catch((err) => {
     console.log(err)
-    return { "content": "Bot failed to Start :(" }
+    return { "content": "Something went wrong :(" }
   })
 
-  return await putPromise
+  return await getPromise
 }
 exports.handler = (event) => {
   globalHandler(event, action);

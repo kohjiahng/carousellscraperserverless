@@ -17,13 +17,22 @@ provider:
         - Effect: Allow
           Action:
             - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
           Resource: !GetAtt RequestTable.Arn
+
+package:
+  individually: true
 
 functions:
   proxyLambda:
     handler: proxylambda/index.handler
     environment:
       TOPIC_ARN: !Ref CommandTopic
+    package:
+      patterns:
+        - '!./**'
+        - proxylambda/**
   startHandler:
     handler: starthandler/index.handler
     environment:
@@ -35,6 +44,43 @@ functions:
           filterPolicy:
             command:
               - start
+    package:
+      patterns:
+        - '!./**'
+        - starthandler/**
+        - handlerpackage/**
+  statusHandler:
+    handler: statushandler/index.handler
+    environment:
+      TABLE_ARN: !Ref RequestTable
+    events:
+      - sns:
+          arn: !Ref CommandTopic
+          topicName: CommandTopic
+          filterPolicy:
+            command:
+              - status
+    package:
+      patterns:
+        - '!./**'
+        - statushandler/**
+        - handlerpackage/**
+  stopHandler:
+    handler: stophandler/index.handler
+    environment:
+      TABLE_ARN: !Ref RequestTable
+    events:
+      - sns:
+          arn: !Ref CommandTopic
+          topicName: CommandTopic
+          filterPolicy:
+            command:
+              - stop
+    package:
+      patterns:
+        - '!./**'
+        - stophandler/**
+        - handlerpackage/**
 
 resources:
   Resources:

@@ -1,3 +1,5 @@
+/* Handler to edit "Bot is thinking..." message */
+
 const axios = require('axios')
 exports.globalHandler = async (event, action) => {
   /*
