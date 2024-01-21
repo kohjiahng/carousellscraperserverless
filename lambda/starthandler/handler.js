@@ -1,10 +1,10 @@
 const axios = require('axios')
 exports.globalHandler = async (event, action) => {
   /*
-   * Should be changed to respond differently depending on interaction type.
-   * Now it only edits "Loading..." message, therefore only answers to
-   * text interactions.
-   */
+   * Retrieves body from SNS event, then passes it to the action function
+   * Edits the message identified by body.application_id and body.token to the output of action
+  */
+
   const body = JSON.parse(event.Records[0].Sns.Message)
   const response = await action(body)
   console.log(`https://discord.com/api/v10/webhooks/${body.application_id}/${body.token}/messages/@original`,)

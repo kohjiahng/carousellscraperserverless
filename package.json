@@ -11,7 +11,7 @@
   "scripts": {
     "deploy": "cd lambda && serverless deploy && sh ../deploy_worker_api.sh",
     "deploy-worker-api": "sh deploy_worker_api.sh",
-    "deploy-lambda": "cd lambda && serverless deploy",
+    "deploy-aws": "cd lambda && serverless deploy",
     "register-commands": "cd register_commands && yarn register"
   }
 }

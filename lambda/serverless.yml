@@ -14,6 +14,10 @@ provider:
           Action:
             - sns:Publish
           Resource: !Ref CommandTopic
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+          Resource: !GetAtt RequestTable.Arn
 
 functions:
   proxyLambda:
@@ -22,6 +26,8 @@ functions:
       TOPIC_ARN: !Ref CommandTopic
   startHandler:
     handler: starthandler/index.handler
+    environment:
+      TABLE_ARN: !Ref RequestTable
     events:
       - sns:
           arn: !Ref CommandTopic
@@ -35,7 +41,7 @@ resources:
     CommandTopic:
       Type: AWS::SNS::Topic
       Properties:
-        TopicName: CommandTopic
+        TopicName: CarousellDiscordScraperCommandTopic
     ProxyLambdaInvoker:
       Type: AWS::IAM::User
       Properties:
@@ -54,7 +60,17 @@ resources:
       Properties:
         UserName:
           Ref: ProxyLambdaInvoker
-
+    RequestTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CarousellDiscordScraperRequestTable
+        AttributeDefinitions:
+          - AttributeName: channel_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: channel_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 outputs:
   ProxyLambdaInvokerAccessKeyID: !Ref ProxyLambdaInvokerUserKey
   ProxyLambdaInvokerSecretAccessKey: !GetAtt ProxyLambdaInvokerUserKey.SecretAccessKey
