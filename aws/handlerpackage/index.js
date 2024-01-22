@@ -1,1 +1,1 @@
-module.exports = require('./handler.js')
+module.exports = require("./handler.js");

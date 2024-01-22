@@ -11,7 +11,7 @@
     "aws4fetch": "^1.0.17",
     "tweetnacl": "^1.0.3"
   },
-  "scripts":{
+  "scripts": {
     "deploy": "wrangler deploy"
   }
 }
