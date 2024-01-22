@@ -117,6 +117,7 @@ resources:
           - AttributeName: channel_id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+        
 outputs:
   ProxyLambdaInvokerAccessKeyID: !Ref ProxyLambdaInvokerUserKey
   ProxyLambdaInvokerSecretAccessKey: !GetAtt ProxyLambdaInvokerUserKey.SecretAccessKey

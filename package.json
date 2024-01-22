@@ -5,9 +5,9 @@
   "author": "Jia Hng <jiahngkoh@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "deploy": "cd lambda && serverless deploy && sh ../deploy_worker_api.sh",
+    "deploy": "cd aws && serverless deploy && sh ../deploy_worker_api.sh",
     "deploy-worker-api": "sh deploy_worker_api.sh",
-    "deploy-aws": "cd lambda && serverless deploy",
+    "deploy-aws": "cd aws && serverless deploy",
     "register-commands": "cd register_commands && yarn register"
   }
 }
