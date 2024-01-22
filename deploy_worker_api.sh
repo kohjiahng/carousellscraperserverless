@@ -1,6 +1,6 @@
 # Assumes lambda is already deployed
 
-cd lambda
+cd aws
 AWS_ACCESS_KEY_ID=$(serverless output get --name ProxyLambdaInvokerAccessKeyID)
 AWS_SECRET_ACCESS_KEY=$(serverless output get --name ProxyLambdaInvokerSecretAccessKey)
 LAMBDA_FN=$(serverless output get --name ProxyLambdaArn)

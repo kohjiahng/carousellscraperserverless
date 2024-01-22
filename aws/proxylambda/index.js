@@ -1,5 +1,6 @@
 const AWS = require("aws-sdk");
 exports.handler = async (event) => {
+  const body = JSON.parse(event.body);
   var params = {
     Message: event.body,
     TopicArn: process.env.TOPIC_ARN,

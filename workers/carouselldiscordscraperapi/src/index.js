@@ -5,6 +5,7 @@ import nacl from "tweetnacl";
 // Modified from https://github.com/mhart/aws4fetch/tree/master/example
 
 class JsonResponse extends Response {
+  // Class to insert "application/json;charset=UTF-8" into headers.Content-Type
   constructor(body, init) {
     const jsonBody = JSON.stringify(body);
     init.headers = init.headers || {};
@@ -22,7 +23,7 @@ async function verifyEvent(event, PUBLIC_KEY) {
   const isVerified = nacl.sign.detached.verify(
     Buffer.from(timestamp + strBody),
     Buffer.from(signature, "hex"),
-    Buffer.from(PUBLIC_KEY, "hex"),
+    Buffer.from(PUBLIC_KEY, "hex")
   );
   return isVerified;
 }
@@ -34,11 +35,11 @@ async function toLambdaEvent(request) {
     path: url.pathname,
     queryStringParameters: [...url.searchParams].reduce(
       (obj, [key, val]) => ({ ...obj, [key]: val }),
-      {},
+      {}
     ),
     headers: [...request.headers].reduce(
       (obj, [key, val]) => ({ ...obj, [key]: val }),
-      {},
+      {}
     ),
     body: ["GET", "HEAD"].includes(request.method)
       ? undefined
@@ -51,18 +52,13 @@ export default {
     const aws = new AwsClient({
       accessKeyId: env.AWS_ACCESS_KEY_ID,
       secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-    }); // eslint-disable-line no-undef
+    });
+
     const REGION = env.REGION || "ap-southeast-1";
     const LAMBDA_INVOKE_URL = `https://lambda.${REGION}.amazonaws.com/2015-03-31/functions/${env.LAMBDA_FN}/invocations`;
 
-    console.log({
-      accessKeyId: env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-      lambda_fn: env.LAMBDA_FN,
-    });
     const lambdaEvent = await toLambdaEvent(request);
     const requestBody = JSON.parse(lambdaEvent.body);
-    console.log(requestBody);
 
     const verifyPromise = verifyEvent(lambdaEvent, env.PUBLIC_KEY);
 
@@ -81,7 +77,7 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Amz-Invocation-Type": "Event",
+          "X-Amz-Invocation-Type": "Event", // Async invoke
         },
         body: JSON.stringify(lambdaEvent),
       });

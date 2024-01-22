@@ -10,7 +10,7 @@ const action = async (body) => {
     Key: {
       channel_id: { S: channel_id },
     },
-    ReturnValues: "ALL_OLD",
+    ReturnValues: "ALL_OLD", // To check if item existed
   };
 
   deletePromise = new Promise((resolve, reject) => {
