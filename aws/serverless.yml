@@ -47,6 +47,7 @@ functions:
     handler: starthandler/index.handler
     environment:
       TABLE_ARN: !Ref RequestTable
+      WEBHOOK_HANDLER_FN: !GetAtt WebhookHandlerLambdaFunction.Arn
     package:
       patterns:
         - "!./**"

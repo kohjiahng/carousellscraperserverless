@@ -10,13 +10,10 @@ exports.globalHandler = async (event, action) => {
   const body = JSON.parse(event.Records[0].Sns.Message);
   const actionResult = await action(body);
 
-  console.log(
-    `https://discord.com/api/v10/webhooks/${body.application_id}/${body.token}/messages/@original`,
-  );
   axios
     .patch(
       `https://discord.com/api/v10/webhooks/${body.application_id}/${body.token}/messages/@original`,
-      actionResult,
+      actionResult
     )
     .then(function (response) {
       // console.log(response);
