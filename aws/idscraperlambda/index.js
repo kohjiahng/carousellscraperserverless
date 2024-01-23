@@ -21,8 +21,9 @@ function getTTL() {
   return (Math.floor(Date.now() / 1000) + 60 * 60).toString(); // Unix time in seconds after an hour
 }
 exports.handler = async (event) => {
-  target_url = event.target_url.S;
-  channel_id = event.channel_id.S;
+  const target_url = event.target_url.S;
+  const channel_id = event.channel_id.S;
+  const webhook_url = event.webhook_url.S;
 
   console.log(event);
 
@@ -43,6 +44,7 @@ exports.handler = async (event) => {
       Item: {
         channel_id: { S: channel_id },
         listing_id: { S: item_id },
+        webhook_url: { S: webhook_url },
         ttl: { N: getTTL() },
       },
     };
