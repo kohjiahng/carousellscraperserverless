@@ -1,5 +1,8 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const AWS = require("aws-sdk");
+const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
+
 function extractIds($) {
   return $("div")
     .find("div[data-testid^='listing-card-']")
@@ -14,6 +17,9 @@ function extractIds($) {
     });
 }
 
+function getTTL() {
+  return (Math.floor(Date.now() / 1000) + 60 * 60).toString(); // Unix time in seconds after an hour
+}
 exports.handler = async (event) => {
   target_url = event.target_url.S;
   channel_id = event.channel_id.S;
@@ -31,5 +37,28 @@ exports.handler = async (event) => {
       return extractIds($);
     });
 
-  console.log(item_ids);
+  const items = item_ids.map((item_id) => {
+    return {
+      TableName: process.env.LISTING_TABLE_ARN,
+      Item: {
+        channel_id: { S: channel_id },
+        listing_id: { S: item_id },
+        ttl: { N: getTTL() },
+      },
+    };
+  });
+  const putPromises = items.map((item) => {
+    return new Promise((resolve, reject) => {
+      dynamodb.putItem(item, (err, data) => {
+        if (data) {
+          resolve(data);
+        } else {
+          console.log(err);
+          reject(err);
+        }
+      });
+    });
+  });
+
+  await Promise.allSettled(putPromises);
 };

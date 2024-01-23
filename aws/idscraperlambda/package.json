@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1541.0",
     "axios": "^1.6.5",
     "cheerio": "^1.0.0-rc.12"
   }

@@ -20,7 +20,9 @@ provider:
             - dynamodb:GetItem
             - dynamodb:DeleteItem
             - dynamodb:Scan
-          Resource: !GetAtt RequestTable.Arn
+          Resource:
+            - !GetAtt RequestTable.Arn
+            - !GetAtt ListingTable.Arn
         - Effect: Allow
           Action:
             - lambda:InvokeFunction
@@ -92,6 +94,8 @@ functions:
 
   idScraperLambda:
     handler: idscraperlambda/index.handler
+    environment:
+      LISTING_TABLE_ARN: !Ref ListingTable
     package:
       patterns:
         - "!./**"
@@ -106,8 +110,8 @@ functions:
       patterns:
         - "!./**"
         - scraperproxy/**
-    events:
-      - schedule: rate(5 minutes)
+    # events:
+    #   - schedule: rate(5 minutes)
 
 resources:
   Resources:
@@ -147,6 +151,25 @@ resources:
           - AttributeName: channel_id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+
+    ListingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CarousellDiscordScraperListingTable
+        AttributeDefinitions:
+          - AttributeName: channel_id
+            AttributeType: S
+          - AttributeName: listing_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: channel_id
+            KeyType: HASH
+          - AttributeName: listing_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
 
 outputs:
   ProxyLambdaInvokerAccessKeyID: !Ref ProxyLambdaInvokerUserKey
