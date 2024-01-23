@@ -2,6 +2,7 @@ org: jiahng
 app: carousell-discord-scraper
 service: CarousellDiscordScraper
 frameworkVersion: "3"
+useDotenv: true
 
 provider:
   name: aws
@@ -23,6 +24,7 @@ provider:
           Resource:
             - !GetAtt RequestTable.Arn
             - !GetAtt ListingTable.Arn
+            - !GetAtt WebhookTable.Arn
         - Effect: Allow
           Action:
             - lambda:InvokeFunction
@@ -113,6 +115,16 @@ functions:
     # events:
     #   - schedule: rate(5 minutes)
 
+  webhookHandler:
+    handler: webhookhandler/index.handler
+    environment:
+      WEBHOOK_TABLE_ARN: !Ref WebhookTable
+      TOKEN: ${env:TOKEN}
+    package:
+      patterns:
+        - "!./**"
+        - webhookhandler/**
+
 resources:
   Resources:
     CommandTopic:
@@ -170,6 +182,17 @@ resources:
         TimeToLiveSpecification:
           AttributeName: ttl
           Enabled: true
+    WebhookTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CarousellDiscordScraperWebhookTable
+        AttributeDefinitions:
+          - AttributeName: channel_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: channel_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
 outputs:
   ProxyLambdaInvokerAccessKeyID: !Ref ProxyLambdaInvokerUserKey

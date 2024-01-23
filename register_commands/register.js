@@ -8,6 +8,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+// https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
 let commands = [
   {
     name: "start",

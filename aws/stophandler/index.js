@@ -16,9 +16,9 @@ const action = async (body) => {
   deletePromise = new Promise((resolve, reject) => {
     dynamodb.deleteItem(params, (err, data) => {
       if (data) {
-        console.log(data);
         resolve(data);
       } else {
+        console.log(err);
         reject(err);
       }
     });

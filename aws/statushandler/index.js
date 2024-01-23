@@ -3,9 +3,7 @@ const AWS = require("aws-sdk");
 
 const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 const action = async (body) => {
-  channel_id = body.channel_id;
-  target_url =
-    "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
+  const channel_id = body.channel_id;
 
   const params = {
     TableName: process.env.TABLE_ARN,
