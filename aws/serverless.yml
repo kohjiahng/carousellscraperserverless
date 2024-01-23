@@ -125,6 +125,17 @@ functions:
       patterns:
         - "!./**"
         - webhookhandler/**
+  listingHandler:
+    handler: listinghandler/index.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt ListingTable.StreamArn
+          batchSize: 8
+    package:
+      patterns:
+        - "!./**"
+        - listinghandler/**
 
 resources:
   Resources:
@@ -183,6 +194,8 @@ resources:
         TimeToLiveSpecification:
           AttributeName: ttl
           Enabled: true
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
     WebhookTable:
       Type: AWS::DynamoDB::Table
       Properties:
