@@ -19,7 +19,12 @@ provider:
             - dynamodb:PutItem
             - dynamodb:GetItem
             - dynamodb:DeleteItem
+            - dynamodb:Scan
           Resource: !GetAtt RequestTable.Arn
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "*"
 
 package:
   individually: true
@@ -84,6 +89,25 @@ functions:
           filterPolicy:
             command:
               - stop
+
+  idScraperLambda:
+    handler: idscraperlambda/index.handler
+    package:
+      patterns:
+        - "!./**"
+        - idscraperlambda/**
+
+  scraperProxy:
+    handler: scraperproxy/index.handler
+    environment:
+      TABLE_ARN: !Ref RequestTable
+      SCRAPER_FN: !GetAtt IdScraperLambdaLambdaFunction.Arn
+    package:
+      patterns:
+        - "!./**"
+        - scraperproxy/**
+    events:
+      - schedule: rate(5 minutes)
 
 resources:
   Resources:
