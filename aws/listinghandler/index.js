@@ -58,6 +58,13 @@ async function createEmbed(listing_id, listing_details) {
 function sendEmbed(embed, webhook_url) {
   return axios.post(webhook_url, { embeds: [embed] });
 }
+function isRecentListing(listing_details) {
+  const secondsSince = Math.floor(
+    (Date.now() - new Date(listing_details.time_created).getTime()) / 1000
+  );
+  console.log(secondsSince);
+  return secondsSince <= 60 * 60; // <= 1h ago
+}
 async function processRecord(record) {
   if (record.eventName != "INSERT") {
     console.log(record.eventName);
@@ -68,9 +75,13 @@ async function processRecord(record) {
   const webhook_url = item.webhook_url.S;
   const channel_id = item.channel_id.S;
 
-  return getListingDetails(listing_id)
-    .then((listing_details) => createEmbed(listing_id, listing_details))
-    .then((embed) => sendEmbed(embed, webhook_url));
+  const listing_details = await getListingDetails(listing_id);
+  if (!isRecentListing(listing_details)) {
+    return;
+  }
+  return createEmbed(listing_id, listing_details).then((embed) =>
+    sendEmbed(embed, webhook_url)
+  );
 }
 exports.handler = async (event) => {
   const processPromises = event.Records.map(processRecord);

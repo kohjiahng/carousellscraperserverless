@@ -113,8 +113,8 @@ functions:
       patterns:
         - "!./**"
         - scraperproxy/**
-    events:
-      - schedule: rate(1 minute)
+    # events:
+    #   - schedule: rate(1 minute)
 
   webhookHandler:
     handler: webhookhandler/index.handler
