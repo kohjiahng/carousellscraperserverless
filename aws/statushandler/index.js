@@ -6,7 +6,7 @@ const action = async (body) => {
   const channel_id = body.channel_id;
 
   const params = {
-    TableName: process.env.TABLE_ARN,
+    TableName: process.env.REQUEST_TABLE_ARN,
     Key: {
       channel_id: { S: channel_id },
     },

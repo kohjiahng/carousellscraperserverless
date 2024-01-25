@@ -34,7 +34,7 @@ function createWebhook(channel_id) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bot ${process.env.TOKEN}`,
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
         },
       }
     )
@@ -67,7 +67,7 @@ exports.handler = async (event) => {
   const getResponse = await getWebhook(channel_id);
 
   if (getResponse.Item) {
-    return { statusCode: 200, webhook_url: getResponse.Item.webhook_url };
+    return { statusCode: 200, webhook_url: getResponse.Item.webhook_url.S };
   } else {
     const webhook_url = await createWebhook(channel_id);
     await uploadWebhook(channel_id, webhook_url);

@@ -3,7 +3,7 @@ exports.handler = async (event) => {
   const body = JSON.parse(event.body);
   var params = {
     Message: event.body,
-    TopicArn: process.env.TOPIC_ARN,
+    TopicArn: process.env.COMMAND_TOPIC_ARN,
     MessageAttributes: {
       command: { DataType: "String", StringValue: body.data.name },
     },

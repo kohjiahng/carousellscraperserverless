@@ -5,7 +5,7 @@ const lambda = new AWS.Lambda({ apiVersion: "2015-03-31" });
 
 async function callScraper(item) {
   const params = {
-    FunctionName: process.env.SCRAPER_FN,
+    FunctionName: process.env.ID_SCRAPER_ARN,
     InvokeArgs: JSON.stringify(item),
   };
   invokePromise = new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ async function callScraper(item) {
 }
 exports.handler = async (event) => {
   scanResult = await new Promise((resolve, reject) => {
-    dynamodb.scan({ TableName: process.env.TABLE_ARN }, (err, data) => {
+    dynamodb.scan({ TableName: process.env.REQUEST_TABLE_ARN }, (err, data) => {
       if (data) {
         resolve(data);
       } else {

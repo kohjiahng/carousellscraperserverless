@@ -4,4 +4,4 @@ compatibility_date = "2024-01-20"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-PUBLIC_KEY = "4204da410eda2a5c8b01a0c7d691656be096e3b5b25009c919b4de5307012f54"
+DISCORD_PUBLIC_KEY = "4204da410eda2a5c8b01a0c7d691656be096e3b5b25009c919b4de5307012f54"

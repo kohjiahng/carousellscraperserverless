@@ -37,7 +37,7 @@ functions:
   proxyLambda:
     handler: proxylambda/index.handler
     environment:
-      TOPIC_ARN: !Ref CommandTopic
+      COMMAND_TOPIC_ARN: !Ref CommandTopic
     package:
       patterns:
         - "!./**"
@@ -46,8 +46,8 @@ functions:
   startHandler:
     handler: starthandler/index.handler
     environment:
-      TABLE_ARN: !Ref RequestTable
-      WEBHOOK_HANDLER_FN: !GetAtt WebhookHandlerLambdaFunction.Arn
+      REQUEST_TABLE_ARN: !Ref RequestTable
+      WEBHOOK_HANDLER_ARN: !GetAtt WebhookHandlerLambdaFunction.Arn
     package:
       patterns:
         - "!./**"
@@ -64,7 +64,7 @@ functions:
   statusHandler:
     handler: statushandler/index.handler
     environment:
-      TABLE_ARN: !Ref RequestTable
+      REQUEST_TABLE_ARN: !Ref RequestTable
     package:
       patterns:
         - "!./**"
@@ -81,7 +81,7 @@ functions:
   stopHandler:
     handler: stophandler/index.handler
     environment:
-      TABLE_ARN: !Ref RequestTable
+      REQUEST_TABLE_ARN: !Ref RequestTable
     package:
       patterns:
         - "!./**"
@@ -107,8 +107,8 @@ functions:
   scraperProxy:
     handler: scraperproxy/index.handler
     environment:
-      TABLE_ARN: !Ref RequestTable
-      SCRAPER_FN: !GetAtt IdScraperLambdaLambdaFunction.Arn
+      REQUEST_TABLE_ARN: !Ref RequestTable
+      ID_SCRAPER_ARN: !GetAtt IdScraperLambdaLambdaFunction.Arn
     package:
       patterns:
         - "!./**"
@@ -120,7 +120,7 @@ functions:
     handler: webhookhandler/index.handler
     environment:
       WEBHOOK_TABLE_ARN: !Ref WebhookTable
-      TOKEN: ${env:TOKEN}
+      DISCORD_BOT_TOKEN: ${env:TOKEN}
     package:
       patterns:
         - "!./**"

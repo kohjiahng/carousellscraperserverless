@@ -7,7 +7,7 @@ const lambda = new AWS.Lambda({ apiVersion: "2015-03-31" });
 function callWebhookHandler(channel_id) {
   // calls webhookHandler lambda to retrieve a webhook
   const params = {
-    FunctionName: process.env.WEBHOOK_HANDLER_FN,
+    FunctionName: process.env.WEBHOOK_HANDLER_ARN,
     Payload: JSON.stringify({ channel_id: channel_id }),
   };
   invokePromise = new Promise((resolve, reject) => {
@@ -26,13 +26,17 @@ function callWebhookHandler(channel_id) {
 }
 const action = async (body) => {
   const channel_id = body.channel_id;
-  const url_option = body.data.options.find((option) => option.name == "url");
-  const target_url = url_option
-    ? url_option.value
-    : "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
 
+  let target_url;
+  try {
+    const url_option = body.data.options.find((option) => option.name == "url");
+    target_url = url_option.value;
+  } catch (TypeError) {
+    target_url =
+      "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
+  }
   const webhookPromise = callWebhookHandler(channel_id)
-    .then((response) => JSON.parse(response.Payload).webhook_url.S)
+    .then((response) => JSON.parse(response.Payload).webhook_url)
     .catch((err) => {
       console.log(err);
       return null;
@@ -46,7 +50,7 @@ const action = async (body) => {
   }
 
   const params = {
-    TableName: process.env.TABLE_ARN,
+    TableName: process.env.REQUEST_TABLE_ARN,
     Item: {
       channel_id: { S: channel_id },
       target_url: { S: target_url },

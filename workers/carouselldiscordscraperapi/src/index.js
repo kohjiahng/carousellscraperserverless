@@ -60,7 +60,7 @@ export default {
     const lambdaEvent = await toLambdaEvent(request);
     const requestBody = JSON.parse(lambdaEvent.body);
 
-    const verifyPromise = verifyEvent(lambdaEvent, env.PUBLIC_KEY);
+    const verifyPromise = verifyEvent(lambdaEvent, env.DISCORD_PUBLIC_KEY);
 
     if (requestBody.type == 1) {
       // Ping
