@@ -29,7 +29,7 @@ function createWebhook(channel_id) {
     .post(
       `https://discord.com/api/v10/channels/${channel_id}/webhooks`,
       {
-        name: "test",
+        name: "CarousellScraper",
       },
       {
         headers: {
