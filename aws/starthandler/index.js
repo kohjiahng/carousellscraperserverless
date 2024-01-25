@@ -13,7 +13,7 @@ function callWebhookHandler(channel_id) {
   invokePromise = new Promise((resolve, reject) => {
     lambda.invoke(params, (err, data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
         resolve(data);
       } else {
         console.log(err);

@@ -137,7 +137,9 @@ functions:
       - stream:
           type: dynamodb
           arn: !GetAtt ListingTable.StreamArn
-          batchSize: 8
+          batchSize: 1
+          filterPatterns:
+            - eventName: [INSERT]
     package:
       patterns:
         - "!./**"

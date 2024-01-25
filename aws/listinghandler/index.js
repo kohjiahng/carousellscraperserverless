@@ -9,7 +9,7 @@ function getListingDetails(listing_id) {
       }
     )
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       return response.data.data.screens[0].meta.default_value;
     });
 }
@@ -52,7 +52,7 @@ async function createEmbed(listing_id, listing_details) {
       url: image_url,
     },
   };
-  console.log(embed);
+  // console.log(embed);
   return embed;
 }
 function sendEmbed(embed, webhook_url) {
@@ -62,7 +62,7 @@ function isRecentListing(listing_details) {
   const secondsSince = Math.floor(
     (Date.now() - new Date(listing_details.time_created).getTime()) / 1000
   );
-  console.log(secondsSince);
+  // console.log(secondsSince);
   return secondsSince <= 60 * 60; // <= 1h ago
 }
 async function processRecord(record) {
