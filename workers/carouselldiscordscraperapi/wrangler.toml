@@ -3,5 +3,11 @@ main = "src/index.js"
 compatibility_date = "2024-01-20"
 compatibility_flags = [ "nodejs_compat" ]
 
-[vars]
-DISCORD_PUBLIC_KEY = "4204da410eda2a5c8b01a0c7d691656be096e3b5b25009c919b4de5307012f54"
+[env.dev]
+ENVIRONMENT = "dev"
+vars = {DISCORD_PUBLIC_KEY = "4204da410eda2a5c8b01a0c7d691656be096e3b5b25009c919b4de5307012f54"}
+
+
+[env.prod]
+ENVIRONMENT = "prod"
+vars = {DISCORD_PUBLIC_KEY = "55ccd1fbe41c1bc7e6da831c4815fba782fa70ea0ae4fc632f422c20b2d5e825"}

@@ -8,6 +8,7 @@
     "dotenv": "^16.3.2"
   },
   "scripts": {
-    "register": "node register.js"
+    "register-dev": "STAGE=dev node register.js",
+    "register-prod": "STAGE=prod node register.js"
   }
 }

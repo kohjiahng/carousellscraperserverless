@@ -6,10 +6,12 @@
   "license": "MIT",
   "scripts": {
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-    "deploy": "cd aws && serverless deploy && sh ../deploy_worker_api.sh",
-    "deploy-worker-api": "sh deploy_worker_api.sh",
-    "deploy-aws": "cd aws && serverless deploy",
-    "register-commands": "cd register_commands && yarn register"
+    "deploy-dev": "cd aws && serverless deploy --stage dev && STAGE=dev sh ../deploy_worker_api.sh",
+    "deploy-prod": "cd aws && serverless deploy --stage prod && STAGE=prod sh ../deploy_worker_api.sh",
+    "deploy-worker-api": "STAGE=dev sh deploy_worker_api.sh",
+    "deploy-aws": "cd aws && STAGE=dev serverless deploy",
+    "register-commands-dev": "cd register_commands && yarn register-dev",
+    "register-commands-prod": "cd register_commands && yarn register-prod"
   },
   "devDependencies": {
     "prettier": "^3.2.4"

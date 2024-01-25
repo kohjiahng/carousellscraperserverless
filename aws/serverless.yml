@@ -30,6 +30,10 @@ provider:
             - lambda:InvokeFunction
           Resource: "*"
 
+custom:
+  scheduleEnabled:
+    dev: false
+    prod: true
 package:
   individually: true
 
@@ -113,14 +117,16 @@ functions:
       patterns:
         - "!./**"
         - scraperproxy/**
-    # events:
-    #   - schedule: rate(1 minute)
+    events:
+      - schedule:
+          rate: rate(1 minute)
+          enabled: ${self:custom.scheduleEnabled.${sls:stage}}
 
   webhookHandler:
     handler: webhookhandler/index.handler
     environment:
       WEBHOOK_TABLE_ARN: !Ref WebhookTable
-      DISCORD_BOT_TOKEN: ${env:TOKEN}
+      DISCORD_BOT_TOKEN: ${env:DISCORD_BOT_TOKEN}
     package:
       patterns:
         - "!./**"
@@ -142,12 +148,12 @@ resources:
     CommandTopic:
       Type: AWS::SNS::Topic
       Properties:
-        TopicName: CarousellDiscordScraperCommandTopic
+        TopicName: CarousellDiscordScraperCommandTopic-${sls:stage}
 
     ProxyLambdaInvoker:
       Type: AWS::IAM::User
       Properties:
-        UserName: "ProxyLambdaInvoker"
+        UserName: "ProxyLambdaInvoker-${sls:stage}"
         Policies:
           - PolicyName: ProxyLambdaInvokePolicy
             PolicyDocument:
@@ -167,7 +173,7 @@ resources:
     RequestTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: CarousellDiscordScraperRequestTable
+        TableName: CarousellDiscordScraperRequestTable-${sls:stage}
         AttributeDefinitions:
           - AttributeName: channel_id
             AttributeType: S
@@ -179,7 +185,7 @@ resources:
     ListingTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: CarousellDiscordScraperListingTable
+        TableName: CarousellDiscordScraperListingTable-${sls:stage}
         AttributeDefinitions:
           - AttributeName: channel_id
             AttributeType: S
@@ -199,7 +205,7 @@ resources:
     WebhookTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: CarousellDiscordScraperWebhookTable
+        TableName: CarousellDiscordScraperWebhookTable-${sls:stage}
         AttributeDefinitions:
           - AttributeName: channel_id
             AttributeType: S

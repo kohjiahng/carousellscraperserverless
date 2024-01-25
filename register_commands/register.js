@@ -1,4 +1,9 @@
-require("dotenv").config();
+if (process.env.STAGE) {
+  require("dotenv").config({ path: `.env.${process.env.STAGE}` });
+} else {
+  require("dotenv").config();
+}
+
 const axios = require("axios").default;
 
 let url = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
