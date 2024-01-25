@@ -14,6 +14,8 @@
     "register-commands-prod": "cd register_commands && yarn register-prod"
   },
   "devDependencies": {
-    "prettier": "^3.2.4"
-  }
+    "prettier": "^3.2.4",
+    "yarn-recursive": "^1.1.0"
+  },
+  "dependencies": {}
 }

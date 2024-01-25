@@ -6,3 +6,5 @@ node_modules/
 .serverless/
 pricing.md
 .vscode/
+
+!.env.example

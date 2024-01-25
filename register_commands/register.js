@@ -9,7 +9,7 @@ const axios = require("axios").default;
 let url = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
 
 const headers = {
-  Authorization: `Bot ${process.env.BOT_TOKEN}`,
+  Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
   "Content-Type": "application/json",
 };
 
