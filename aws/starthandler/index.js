@@ -26,8 +26,10 @@ function callWebhookHandler(channel_id) {
 }
 const action = async (body) => {
   const channel_id = body.channel_id;
-  const target_url =
-    "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
+  const url_option = body.data.options.find((option) => option.name == "url");
+  const target_url = url_option
+    ? url_option.value
+    : "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
 
   const webhookPromise = callWebhookHandler(channel_id)
     .then((response) => JSON.parse(response.Payload).webhook_url.S)
@@ -39,7 +41,7 @@ const action = async (body) => {
   const webhook_url = await webhookPromise;
   console.log(webhook_url);
 
-  if (webhook_url == null) {
+  if (!webhook_url) {
     return { content: "Bot failed to start :(" };
   }
 

@@ -14,6 +14,14 @@ let commands = [
     name: "start",
     type: 1,
     description: "Starts the scraper",
+    options: [
+      {
+        type: 3, // string
+        description: "Carousell url",
+        name: "url",
+        required: false,
+      },
+    ],
   },
   {
     name: "status",
