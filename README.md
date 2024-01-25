@@ -3,6 +3,7 @@
 ## Introduction
 
 This is a scraper that queries carousell.sg periodically and sends new listings to Discord.
+Built on Node.js and an entirely serverless architecture on AWS Lambda.
 
 ## Commands
 
@@ -113,7 +114,8 @@ Fields:
 
 ### ListingTable
 
-Stores all reported listings.
+Stores all reported listings.  
+Uses the Time-to-Live (TTL) feature from DynamoDB to delete entries after an hour.
 
 Fields:
 
