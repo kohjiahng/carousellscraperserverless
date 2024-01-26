@@ -4,16 +4,13 @@ const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
 function extractIds($) {
+  // Assumes all listings are in HTML divs with data-testid='listing-card-{listing_id}'
+
   return $("div")
     .find("div[data-testid^='listing-card-']")
     .toArray()
     .map((item) => {
-      return $(item)
-        .find("a")
-        .toArray()[1]
-        .attribs["href"].split("/")[2]
-        .split("-")
-        .pop();
+      return item.attribs["data-testid"].split("-").pop();
     });
 }
 
@@ -25,9 +22,8 @@ exports.handler = async (event) => {
   const channel_id = event.channel_id.S;
   const webhook_url = event.webhook_url.S;
 
-  console.log(event);
-
-  const item_ids = await axios
+  // Extract listing ids from target_url
+  const listing_ids = await axios
     .get(target_url, {
       headers: {
         "User-Agent": "XXX",
@@ -38,18 +34,20 @@ exports.handler = async (event) => {
       return extractIds($);
     });
 
-  const items = item_ids.map((item_id) => {
+  // Create params to send to DynamoDB
+  const putParams = listing_ids.map((listing_id) => {
     return {
       TableName: process.env.LISTING_TABLE_ARN,
       Item: {
         channel_id: { S: channel_id },
-        listing_id: { S: item_id },
+        listing_id: { S: listing_id },
         webhook_url: { S: webhook_url },
         ttl: { N: getTTL() },
       },
     };
   });
-  const putPromises = items.map((item) => {
+  // Send params to DynamoDB
+  const putPromises = putParams.map((item) => {
     return new Promise((resolve, reject) => {
       dynamodb.putItem(item, (err, data) => {
         if (data) {
