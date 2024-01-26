@@ -3,20 +3,6 @@ const cheerio = require("cheerio");
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
-function extractIds($) {
-  // Assumes all listings are in HTML divs with data-testid='listing-card-{listing_id}'
-
-  return $("div")
-    .find("div[data-testid^='listing-card-']")
-    .toArray()
-    .map((item) => {
-      return item.attribs["data-testid"].split("-").pop();
-    });
-}
-
-function getTTL() {
-  return (Math.floor(Date.now() / 1000) + 60 * 60).toString(); // Unix time in seconds after an hour
-}
 exports.handler = async (event) => {
   const target_url = event.target_url.S;
   const channel_id = event.channel_id.S;
@@ -62,3 +48,18 @@ exports.handler = async (event) => {
 
   await Promise.allSettled(putPromises);
 };
+
+function extractIds($) {
+  // Assumes all listings are in HTML divs with data-testid='listing-card-{listing_id}'
+
+  return $("div")
+    .find("div[data-testid^='listing-card-']")
+    .toArray()
+    .map((item) => {
+      return item.attribs["data-testid"].split("-").pop();
+    });
+}
+
+function getTTL() {
+  return (Math.floor(Date.now() / 1000) + 60 * 60).toString(); // Unix time in seconds after an hour
+}

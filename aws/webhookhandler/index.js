@@ -3,6 +3,19 @@ const AWS = require("aws-sdk");
 
 const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
+exports.handler = async (event) => {
+  const channel_id = event.channel_id;
+  const getResponse = await getWebhook(channel_id);
+
+  if (getResponse.Item) {
+    return { statusCode: 200, webhook_url: getResponse.Item.webhook_url.S };
+  } else {
+    const webhook_url = await createWebhook(channel_id);
+    await uploadWebhook(channel_id, webhook_url);
+    return { statusCode: 200, webhook_url: webhook_url };
+  }
+};
+
 function getWebhook(channel_id) {
   // Checks if there is a webhook in channel in the Table
   const getParams = {
@@ -11,7 +24,6 @@ function getWebhook(channel_id) {
       channel_id: { S: channel_id },
     },
   };
-  console.log(getParams);
   return new Promise((resolve, reject) => {
     dynamodb.getItem(getParams, (err, data) => {
       if (data) {
@@ -49,7 +61,6 @@ function uploadWebhook(channel_id, webhook_url) {
       webhook_url: { S: webhook_url },
     },
   };
-  console.log(putParams);
   return new Promise((resolve, reject) => {
     dynamodb.putItem(putParams, (err, data) => {
       if (data) {
@@ -61,16 +72,3 @@ function uploadWebhook(channel_id, webhook_url) {
     });
   });
 }
-exports.handler = async (event) => {
-  const channel_id = event.channel_id;
-  console.log(event);
-  const getResponse = await getWebhook(channel_id);
-
-  if (getResponse.Item) {
-    return { statusCode: 200, webhook_url: getResponse.Item.webhook_url.S };
-  } else {
-    const webhook_url = await createWebhook(channel_id);
-    await uploadWebhook(channel_id, webhook_url);
-    return { statusCode: 200, webhook_url: webhook_url };
-  }
-};
