@@ -6,7 +6,12 @@ if (process.env.STAGE) {
 
 const axios = require("axios").default;
 
-let url = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
+let url;
+if (process.env.GUILD_ID) {
+  url = `https://discord.com/api/v8/applications/${process.env.APP_ID}/guilds/${process.env.GUILD_ID}/commands`;
+} else {
+  url = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
+}
 
 const headers = {
   Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
