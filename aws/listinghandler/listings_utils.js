@@ -23,10 +23,11 @@ async function createEmbed(listing_id, listing_details) {
   const time_created = Math.floor(
     new Date(listing_details.time_created).getTime() / 1000
   ); // Unix in s
-
+  
+  const description = listing_details.description
   const embed = {
     title: title,
-    description: `${price}\n${condition}\n<t:${time_created}:R>`,
+    description: `${price}\n${condition}\n<t:${time_created}:R>\n\n${description}`,
     url: url,
     image: {
       url: image_url,
