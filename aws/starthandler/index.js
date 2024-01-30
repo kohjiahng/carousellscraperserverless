@@ -1,4 +1,5 @@
 const { globalHandler } = require("../handlerpackage");
+const { validate_target_url } = require("./validate_target_url");
 const AWS = require("aws-sdk");
 
 const dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
@@ -34,6 +35,14 @@ const action = async (body) => {
   } catch (TypeError) {
     target_url =
       "https://www.carousell.sg/categories/cameras-1863/?cameras_type=TYPE_POINT_AND_SHOOT%2CTYPE_DSLR%2CTYPE_MIRRORLESS&searchId=kkZNPc&canChangeKeyword=false&price_end=250&includeSuggestions=false&sort_by=3";
+  }
+
+  try {
+    target_url = await validate_target_url(target_url);
+  } catch (err) {
+    return {
+      content: err.message,
+    };
   }
   const webhookPromise = callWebhookHandler(channel_id)
     .then((response) => JSON.parse(response.Payload).webhook_url)
