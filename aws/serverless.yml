@@ -119,7 +119,7 @@ functions:
         - scraperproxy/**
     events:
       - schedule:
-          rate: rate(1 minute)
+          rate: rate(2 minutes)
           enabled: ${self:custom.scheduleEnabled.${sls:stage}}
 
   webhookHandler:

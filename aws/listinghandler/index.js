@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
 async function processRecord(record) {
   if (record.eventName != "INSERT") {
-    console.log(record.eventName);
+    // console.log(record.eventName);
     return;
   }
   const item = record.dynamodb.NewImage;
